@@ -1,0 +1,29 @@
+workflows:
+  ios-workflow:
+    name: iOS Workflow
+    environment:
+      ios_signing:
+        distribution_type: development
+        bundle_identifier: com.aifun.dateideas.planadate
+      vars:
+        XCODE_WORKSPACE: "ios/Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"
+        BUNDLE_ID: "com.aifun.dateideas.planadate"
+    scripts:
+      - name: Set up code signing settings
+        script: |
+          keychain initialize
+      - name: Get Flutter packages
+        script: |
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          cd ios && pod install
+      - name: Flutter build iOS
+        script: |
+          flutter build ipa --debug \
+            --build-number=$BUILD_NUMBER \
+            --export-options-plist=/Users/builder/export_options.plist \
+            --build-args="-workspace ios/Runner.xcworkspace -scheme Runner -configuration Debug -arch arm64"
+    artifacts:
+      - build/ios/ipa/*.ipa
