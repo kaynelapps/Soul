@@ -9,20 +9,31 @@ workflows:
         XCODE_WORKSPACE: "ios/Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
         BUNDLE_ID: "com.aifun.dateideas.planadate"
+        FLUTTER_VERSION: stable
     scripts:
       - name: Set up code signing settings
         script: |
           keychain initialize
       - name: Get Flutter packages
         script: |
+          flutter clean
           flutter packages pub get
       - name: Install pods
         script: |
-          cd ios && pod install
+          cd ios
+          pod repo update
+          pod install
       - name: Flutter build iOS
         script: |
           flutter build ipa --debug \
             --build-number=$BUILD_NUMBER \
-            --export-options-plist=/Users/builder/export_options.plist
+            --export-options-plist=/Users/builder/export_options.plist \
+            --no-codesign
     artifacts:
       - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - anaskay.13@gmail.com
