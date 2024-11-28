@@ -34,9 +34,9 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  pod 'Firebase/Storage'
-  pod 'Firebase/Auth'
-  pod 'Firebase/AppCheck'
+  pod 'Firebase/Storage', '10.18.0'
+  pod 'Firebase/Auth', '10.18.0'
+  pod 'Firebase/AppCheck', '10.18.0'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
