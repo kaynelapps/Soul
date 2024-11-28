@@ -6,7 +6,8 @@ workflows:
         provisioning_profiles:
           - "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
         certificates:
-          - certificate_path: ios_development
+          - name: ios_development
+            reference: development
       vars:
         XCODE_WORKSPACE: "ios/Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
