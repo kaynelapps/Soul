@@ -6,6 +6,8 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+        <key>CFBundleIdentifier</key>
+        <string>com.aifun.dateideas.planadate</string>
 	<key>CFBundleDisplayName</key>
 	<string>Ai Date Planner</string>
 	<key>CFBundleExecutable</key>
