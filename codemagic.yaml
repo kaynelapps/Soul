@@ -3,12 +3,33 @@ workflows:
     name: iOS Workflow
     environment:
       ios_signing:
-        distribution_type: development
-        bundle_identifier: com.aifun.dateideas.planadate
-        code_signing_identity: "iPhone Developer"  # Add this line
         provisioning_profiles:
-          com.aifun.dateideas.planadate: "SoulPlan AI Fun Date Ideas Development Profile"  # Add your profile name
+          - "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
+        certificates:
+          - certificate_path: ios_development
       vars:
         XCODE_WORKSPACE: "ios/Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
         BUNDLE_ID: "com.aifun.dateideas.planadate"
+    scripts:
+      - name: Set up code signing settings
+        script: |
+          keychain initialize
+      - name: Get Flutter packages
+        script: |
+          flutter clean
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          cd ios
+          pod repo update
+          pod install
+      - name: Flutter build iOS
+        script: |
+          flutter build ipa --debug \
+            --build-number=$BUILD_NUMBER \
+            --export-options-plist=/Users/builder/export_options.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - flutter_drive.log
