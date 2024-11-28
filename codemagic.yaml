@@ -4,10 +4,11 @@ workflows:
     environment:
       ios_signing:
         provisioning_profiles:
-          - "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
+          - name: "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
+            reference: development_profile
         certificates:
-          - name: ios_development
-            reference: development
+          - name: Development Certificate
+            reference: development_cert
       vars:
         XCODE_WORKSPACE: "ios/Runner.xcworkspace"
         XCODE_SCHEME: "Runner"
