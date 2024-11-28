@@ -6,7 +6,7 @@ workflows:
         certificates:
           - "ios_development"
         provisioning_profiles:
-          - "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
+          - "Ad_hoc_SoulPlan_AI"  # Using the simplified name based on your bundle ID
     scripts:
       - name: Set up code signing settings
         script: |
