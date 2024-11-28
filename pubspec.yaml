@@ -57,7 +57,6 @@ dependencies:
   win32: ^5.7.2
   firebase_core: ^2.24.2
   firebase_auth: ^4.15.3
-  cloud_firestore: ^4.8.2
   firebase_storage: ^11.5.6
   firebase_crashlytics: ^3.4.9
   firebase_app_check: ^0.2.1+8
