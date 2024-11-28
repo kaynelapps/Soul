@@ -3,11 +3,12 @@ workflows:
     name: iOS Workflow
     environment:
       ios_signing:
-        distribution_type: development
-        bundle_identifier: com.aifun.dateideas.planadate
-        code_signing_identity: "iPhone Developer"
+        certificates:
+          - certificate: ios_distribution
+            reference: distribution_certificate
         provisioning_profiles:
-          "com.aifun.dateideas.planadate": "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
+          - profile: "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
+            reference: development_profile
     scripts:
       - name: Set up code signing settings
         script: |
