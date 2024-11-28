@@ -34,10 +34,9 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  # Add these Firebase pod specifications
-  pod 'Firebase/Storage', '~> 10.19.0'
-  pod 'Firebase/Auth', '~> 10.19.0'
-  pod 'Firebase/AppCheck', '~> 10.19.0'
+  pod 'Firebase/Storage'
+  pod 'Firebase/Auth'
+  pod 'Firebase/AppCheck'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
@@ -46,36 +45,18 @@ target 'Runner' do
   end
 end
 
-pre_install do |installer|
-  Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
-end
-
 post_install do |installer|
-  installer.pods_project.build_configurations.each do |config|
-    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
-  end
-
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
     target.build_configurations.each do |config|
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
       config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      config.build_settings['FRAMEWORK_SEARCH_PATHS'] = [
-        '$(inherited)',
-        '$(PODS_ROOT)/Flutter',
-        '$(PODS_CONFIGURATION_BUILD_DIR)',
-        '$(PODS_ROOT)/../Flutter',
-        '$(SRCROOT)/../Flutter'
-      ]
-
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      
       if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.bundle"
         config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         config.build_settings['WRAPPER_EXTENSION'] = 'bundle'
-        config.build_settings['SKIP_INSTALL'] = 'NO'
         config.build_settings['GENERATE_INFOPLIST_FILE'] = 'YES'
-        config.build_settings['GENERATE_PKGINFO_FILE'] = 'YES'
-        config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = "#{target.name.gsub('_privacy','')}"
-        config.build_settings['PRODUCT_NAME'] = "#{target.name}"
       end
     end
   end
