@@ -4,11 +4,9 @@ workflows:
     environment:
       ios_signing:
         certificates:
-          - certificate: ios_distribution
-            reference: distribution_certificate
+          - "ios_development"
         provisioning_profiles:
-          - profile: "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
-            reference: development_profile
+          - "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290"
     scripts:
       - name: Set up code signing settings
         script: |
