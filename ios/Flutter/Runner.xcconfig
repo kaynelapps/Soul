@@ -1,0 +1,2 @@
+#include? "Generated.xcconfig"
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(PODS_ROOT)/Flutter

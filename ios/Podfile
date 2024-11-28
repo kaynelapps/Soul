@@ -1,12 +1,5 @@
-warn_for_unused_master_specs_repo = false
-platform :ios, '14.0'
-
-install! 'cocoapods',
-         :deterministic_uuids => false,
-         :generate_multiple_pod_projects => true,
-         :disable_input_output_paths => true,
-         :preserve_pod_file_structure => true,
-         :share_schemes_for_development_pods => true
+source 'https://cdn.cocoapods.org/'
+platform :ios, '12.0'
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -26,7 +19,7 @@ def flutter_root
     matches = line.match(/FLUTTER_ROOT\=(.*)/)
     return matches[1].strip if matches
   end
-  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}"
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
 end
 
 require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
@@ -39,67 +32,62 @@ target 'Runner' do
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
-  pod 'Firebase/Core'
-  pod 'Firebase/Auth'
-  pod 'Firebase/Firestore'
-  pod 'Firebase/Storage'
-  pod 'Firebase/Crashlytics'
-  pod 'Firebase/AppCheck'
-
   target 'RunnerTests' do
     inherit! :search_paths
   end
 end
 
+pre_install do |installer|
+  Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+end
+
+# Your existing configuration remains the same until post_install
+
 post_install do |installer|
-  flutter_post_install(installer) if defined?(flutter_post_install)
-
-  installer.pods_project.targets.each do |target|
-    target.build_phases.each do |build_phase|
-      if build_phase.respond_to?(:name) && build_phase.name.start_with?("[CP]")
-        build_phase.input_paths ||= []
-        build_phase.input_paths << "${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh"
-        build_phase.input_paths << "${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-resources.sh"
-
-        build_phase.output_paths ||= []
-        build_phase.output_paths << "${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/Flutter.framework"
-        build_phase.output_paths << "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car"
-      end
-    end
-
-    target.build_configurations.each do |config|
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
-      config.build_settings['ENABLE_BITCODE'] = 'NO'
-      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'i386'
-      config.build_settings['SWIFT_VERSION'] = '5.0'
-      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      config.build_settings['SWIFT_OPTIMIZATION_LEVEL'] = '-O'
-      config.build_settings['DEAD_CODE_STRIPPING'] = 'YES'
-      config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
-
-      config.build_settings['FRAMEWORK_SEARCH_PATHS'] ||= [
-        "$(inherited)",
-        "$(SRCROOT)/Flutter",
-        "${PODS_XCFRAMEWORKS_BUILD_DIR}/Flutter",
-        "${PODS_ROOT}/../Flutter",
-        "${PODS_CONFIGURATION_BUILD_DIR}/Flutter",
-        "${SRCROOT}/../.symlinks/flutter/ios"
-      ]
-
-      config.build_settings['HEADER_SEARCH_PATHS'] ||= [
-        "$(inherited)",
-        "${PODS_ROOT}/Headers/Public",
-        "${PODS_ROOT}/Headers/Public/Flutter",
-        "${SRCROOT}/../.symlinks/flutter/ios/Flutter.framework/Headers"
-      ]
-    end
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
   end
 
-  installer.generated_projects.each do |project|
-    project.targets.each do |target|
-      target.build_configurations.each do |config|
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+      config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
+      config.build_settings['FRAMEWORK_SEARCH_PATHS'] = [
+        '$(inherited)',
+        '$(PODS_ROOT)/Flutter',
+        '$(PODS_CONFIGURATION_BUILD_DIR)',
+        '$(PODS_ROOT)/../Flutter',
+        '$(SRCROOT)/../Flutter'
+      ]
+
+      # Enhanced privacy bundle handling
+      if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.bundle"
+        config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        config.build_settings['WRAPPER_EXTENSION'] = 'bundle'
+        config.build_settings['SKIP_INSTALL'] = 'NO'
+        config.build_settings['GENERATE_INFOPLIST_FILE'] = 'YES'
       end
+
+      # Enhanced localization settings
+      config.build_settings['CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED'] = 'YES'
+      config.build_settings['SWIFT_EMIT_LOC_STRINGS'] = 'YES'
+      config.build_settings['DEVELOPMENT_LANGUAGE'] = 'en'
+      config.build_settings['SUPPORTED_LOCALES'] = [
+        'en_US', 'en_GB', 'en_CA', 'ko', 'zh', 'es',
+        'fr', 'de', 'hi', 'pt', 'pt_BR', 'ru',
+        'in', 'fil', 'bn', 'af', 'nl'
+      ]
+      config.build_settings['LOCALIZED_STRING_MACRO_NAMES'] = ['NSLocalizedString']
+      config.build_settings['LOCALIZATION_PREFERS_STRING_CATALOGS'] = 'YES'
+
+      config.build_settings['DERIVED_DATA_DIR'] = File.expand_path('~/Downloads/KaynellOS/ai_date/ios/DerivedData')
+      config.build_settings['CONFIGURATION_BUILD_DIR'] = File.expand_path('~/Downloads/KaynellOS/ai_date/ios/Build/Products')
+      config.build_settings['CONFIGURATION_TEMP_DIR'] = File.expand_path('~/Downloads/KaynellOS/ai_date/ios/Build/Intermediates')
+      config.build_settings['OTHER_LDFLAGS'] = ['$(inherited)', '-framework', 'Flutter']
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      config.build_settings['SWIFT_VERSION'] = '5.0'
+      config.build_settings['ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES'] = 'YES'
     end
   end
 end
