@@ -6,7 +6,7 @@ workflows:
         certificates:
           - "ios_development"
         provisioning_profiles:
-          - "SoulPlan AI Fun Date Ideas last minute date idea ios_app_development"
+          - "SoulPlan Al Fun Date Ideas last minute date idea"  # Replace with the exact name from your Codemagic dashboard
     scripts:
       - name: Set up code signing settings
         script: |
