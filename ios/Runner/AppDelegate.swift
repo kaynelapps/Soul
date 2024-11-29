@@ -3,6 +3,13 @@ import UIKit
 import Firebase
 import GoogleMobileAds
 import FBAudienceNetwork
+import sign_in_with_apple
+import webview_flutter_wkwebview
+import FirebaseCore
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseStorage
+import FirebaseCrashlytics
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -11,11 +18,13 @@ import FBAudienceNetwork
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         FirebaseApp.configure()
-
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         FBAudienceNetworkAds.initialize(with: nil)
-
         GeneratedPluginRegistrant.register(with: self)
+
+        // Initialize Crashlytics
+        Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
+
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 }
