@@ -69,9 +69,9 @@ post_install do |installer|
       config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
       config.build_settings['VALID_ARCHS'] = 'arm64'
       
-      # Add clean compiler flags
-      config.build_settings['OTHER_CFLAGS'] = ['$(inherited)']
-      config.build_settings['OTHER_LDFLAGS'] = ['$(inherited)']
+      # Remove problematic compiler flags
+      config.build_settings.delete('OTHER_CFLAGS')
+      config.build_settings.delete('OTHER_LDFLAGS')
       
       if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.bundle"
         config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
@@ -81,3 +81,4 @@ post_install do |installer|
     end
   end
 end
+
