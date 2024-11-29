@@ -64,11 +64,14 @@ post_install do |installer|
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = ''
       config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
       
-      # Enhanced webview bundle handling
-      if target.name == 'webview_flutter_wkwebview'
+      # Specific webview handling
+      if target.name.include?('webview_flutter_wkwebview')
         config.build_settings['CONFIGURATION_BUILD_DIR'] = '${PODS_CONFIGURATION_BUILD_DIR}'
         config.build_settings['DEFINES_MODULE'] = 'YES'
         config.build_settings['SWIFT_VERSION'] = '5.0'
+        config.build_settings['GENERATE_INFOPLIST_FILE'] = 'YES'
+        config.build_settings['SKIP_INSTALL'] = 'NO'
+        config.build_settings['INSTALL_PATH'] = '$(LOCAL_LIBRARY_DIR)/Bundles'
       end
       
       if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.bundle"
@@ -76,6 +79,7 @@ post_install do |installer|
         config.build_settings['WRAPPER_EXTENSION'] = 'bundle'
         config.build_settings['GENERATE_INFOPLIST_FILE'] = 'YES'
         config.build_settings['SKIP_INSTALL'] = 'NO'
+        config.build_settings['INSTALL_PATH'] = '$(LOCAL_LIBRARY_DIR)/Bundles'
       end
     end
   end
