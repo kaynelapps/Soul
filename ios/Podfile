@@ -1,8 +1,7 @@
 source 'https://cdn.cocoapods.org/'
 platform :ios, '12.0'
-# Add this right after the platform line
-ENV['FLUTTER_FRAMEWORK_DIR'] = File.expand_path(File.join('..', 'Flutter'), __FILE__)
 
+ENV['FLUTTER_FRAMEWORK_DIR'] = File.expand_path(File.join('..', 'Flutter'), __FILE__)
 
 install! 'cocoapods',
    :disable_input_output_paths => true,
@@ -51,10 +50,12 @@ target 'Runner' do
   # Facebook
   pod 'FBAudienceNetwork'
 
-  # Let Flutter manage the webview plugin
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-end
 
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
@@ -66,7 +67,6 @@ post_install do |installer|
       config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
       config.build_settings['VALID_ARCHS'] = 'arm64'
       
-      # Handle webview privacy bundle
       if target.name == 'webview_flutter_wkwebview'
         config.build_settings['CONFIGURATION_BUILD_DIR'] = '${PODS_CONFIGURATION_BUILD_DIR}'
       end
@@ -79,4 +79,3 @@ post_install do |installer|
     end
   end
 end
-
