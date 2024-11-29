@@ -20,10 +20,8 @@ import FirebaseCrashlytics
         GADMobileAds.sharedInstance().start(completionHandler: nil)
         FBAudienceNetworkAds.initialize(with: nil)
         GeneratedPluginRegistrant.register(with: self)
-
-        // Initialize Crashlytics
         Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(true)
-
+        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 }
