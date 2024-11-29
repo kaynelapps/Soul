@@ -50,12 +50,11 @@ target 'Runner' do
   # Facebook
   pod 'FBAudienceNetwork'
 
-  # Specify single source for webview
-  pod 'webview_flutter_wkwebview', :path => '.symlinks/plugins/webview_flutter_wkwebview/ios'
+  # Specify darwin path for webview
+  pod 'webview_flutter_wkwebview', :path => '.symlinks/plugins/webview_flutter_wkwebview/darwin'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
-
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
@@ -67,11 +66,8 @@ post_install do |installer|
       config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
       config.build_settings['VALID_ARCHS'] = 'arm64'
       
-      # Enhanced webview handling
       if target.name == 'webview_flutter_wkwebview'
         config.build_settings['CONFIGURATION_BUILD_DIR'] = '${PODS_CONFIGURATION_BUILD_DIR}'
-        config.build_settings['HEADER_SEARCH_PATHS'] ||= ['$(inherited)']
-        config.build_settings['HEADER_SEARCH_PATHS'] << '${PODS_ROOT}/Headers/Public/webview_flutter_wkwebview'
       end
       
       if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.bundle"
