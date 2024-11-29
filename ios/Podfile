@@ -53,7 +53,7 @@ target 'Runner' do
   pod 'FBAudienceNetwork'
 
   # Specify darwin path for webview
-  pod 'webview_flutter_wkwebview', :path => '.symlinks/plugins/webview_flutter_wkwebview/darwin'
+ pod 'webview_flutter_wkwebview', :path => '.symlinks/plugins/webview_flutter_wkwebview/ios'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
