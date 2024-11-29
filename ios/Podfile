@@ -69,9 +69,10 @@ post_install do |installer|
       config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
       config.build_settings['VALID_ARCHS'] = 'arm64'
       
-      # Remove problematic compiler flags
-      config.build_settings.delete('OTHER_CFLAGS')
-      config.build_settings.delete('OTHER_LDFLAGS')
+      # Handle webview privacy bundle
+      if target.name == 'webview_flutter_wkwebview'
+        config.build_settings['CONFIGURATION_BUILD_DIR'] = '${PODS_CONFIGURATION_BUILD_DIR}'
+      end
       
       if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.bundle"
         config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
