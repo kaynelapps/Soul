@@ -50,8 +50,8 @@ target 'Runner' do
   # Facebook
   pod 'FBAudienceNetwork'
 
-  # Specify darwin path for webview
-  pod 'webview_flutter_wkwebview', :path => '.symlinks/plugins/webview_flutter_wkwebview/darwin'
+  # Explicit webview dependency with modular headers
+  pod 'webview_flutter_wkwebview', :modular_headers => true
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
@@ -66,8 +66,11 @@ post_install do |installer|
       config.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
       config.build_settings['VALID_ARCHS'] = 'arm64'
       
+      # Enhanced webview configuration
       if target.name == 'webview_flutter_wkwebview'
         config.build_settings['CONFIGURATION_BUILD_DIR'] = '${PODS_CONFIGURATION_BUILD_DIR}'
+        config.build_settings['DEFINES_MODULE'] = 'YES'
+        config.build_settings['SWIFT_VERSION'] = '5.0'
       end
       
       if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.bundle"
