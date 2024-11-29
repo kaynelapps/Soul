@@ -1,9 +1,12 @@
 source 'https://cdn.cocoapods.org/'
 platform :ios, '12.0'
+# Add this right after the platform line
+ENV['FLUTTER_FRAMEWORK_DIR'] = File.expand_path(File.join('..', 'Flutter'), __FILE__)
+
 
 install! 'cocoapods',
-  :disable_input_output_paths => true,
-  :deterministic_uuids => false
+   :disable_input_output_paths => true,
+   :deterministic_uuids => false
 
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -34,13 +37,19 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-pod 'Firebase/Storage', '10.10.0'
-pod 'Firebase/Auth', '10.10.0'
-pod 'Firebase/AppCheck', '10.10.0'
-pod 'Firebase/Firestore', '10.10.0'
-pod 'Firebase/Crashlytics', '10.10.0'
+  # Firebase pods
+  pod 'Firebase/Storage', '10.10.0'
+  pod 'Firebase/Auth', '10.10.0'
+  pod 'Firebase/AppCheck', '10.10.0'
+  pod 'Firebase/Firestore', '10.10.0'
+  pod 'Firebase/Crashlytics', '10.10.0'
+  pod 'Firebase/Analytics', '10.10.0'
 
+  # Google Ads
+  pod 'Google-Mobile-Ads-SDK'
 
+  # Facebook
+  pod 'FBAudienceNetwork'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
@@ -48,6 +57,7 @@ pod 'Firebase/Crashlytics', '10.10.0'
     inherit! :search_paths
   end
 end
+
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
@@ -59,7 +69,7 @@ post_install do |installer|
       config.build_settings['ONLY_ACTIVE_ARCH'] = 'YES'
       config.build_settings['VALID_ARCHS'] = 'arm64'
       config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
-      
+
       if target.respond_to?(:product_type) && target.product_type == "com.apple.product-type.bundle"
         config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
         config.build_settings['WRAPPER_EXTENSION'] = 'bundle'
