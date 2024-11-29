@@ -47,7 +47,7 @@ target 'Runner' do
   pod 'Firebase/Analytics', '10.10.0'
 
   # Google Ads
- pod 'Google-Mobile-Ads-SDK', '10.13.0'
+ pod 'Google-Mobile-Ads-SDK', '~> 11.10.0'
 
 
   # Facebook
