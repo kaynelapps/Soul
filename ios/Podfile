@@ -51,12 +51,12 @@ target 'Runner' do
   # Facebook
   pod 'FBAudienceNetwork'
 
-  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+  # Explicit webview dependency
+  pod 'webview_flutter_wkwebview', :path => '.symlinks/plugins/webview_flutter_wkwebview/ios'
 
-  target 'RunnerTests' do
-    inherit! :search_paths
-  end
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
+
 
 
 post_install do |installer|
