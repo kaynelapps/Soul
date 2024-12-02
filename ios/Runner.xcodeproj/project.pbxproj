@@ -403,27 +403,7 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n\n# Create privacy bundles after Flutter build\nBUNDLES=(\n    \"webview_flutter_wkwebview_privacy\"\n    \"url_launcher_ios_privacy\"\n    \"sqflite_darwin_privacy\"\n    \"leveldb_Privacy\"\n    \"geolocator_apple_privacy\"\n)\n\n# Ensure output file list exists\ntouch \"${SCRIPT_OUTPUT_FILE_LIST_0}\"\n\n\n# Create and declare output files with proper permissions\nfor BUNDLE in \"${BUNDLES[@]}\"; do\n    OUTPUT_PATH=\"${BUILT_PRODUCTS_DIR}/${BUNDLE}.bundle/${BUNDLE}\"\n    mkdir -p \"${BUILT_PRODUCTS_DIR}/${BUNDLE}.bundle\"\n    touch \"$OUTPUT_PATH\"\n    chmod 644 \"$OUTPUT_PATH\"\n    echo \"$OUTPUT_PATH\" >> \"${SCRIPT_OUTPUT_FILE_LIST_0}\"\ndone\n\n# Verify bundles were created with proper permissions\nfor BUNDLE in \"${BUNDLES[@]}\"; do\n    BUNDLE_PATH=\"${BUILT_PRODUCTS_DIR}/${BUNDLE}.bundle/${BUNDLE}\"\n    if [ ! -f \"$BUNDLE_PATH\" ]; then\n        echo \"Creating missing bundle: ${BUNDLE}\"\n        mkdir -p \"${BUILT_PRODUCTS_DIR}/${BUNDLE}.bundle\"\n        touch \"$BUNDLE_PATH\"\n        chmod 644 \"$BUNDLE_PATH\"\n    fi\ndone\n";
 		};
-WEBVIEW_BUNDLE_PHASE /* Webview Bundle */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Create Webview Bundle";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/webview_flutter_wkwebview_privacy.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "mkdir -p \"${CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview_privacy.bundle\"\n";
-		};
 
-/* End PBXShellScriptBuildPhase section */
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
