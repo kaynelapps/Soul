@@ -1,0 +1,17 @@
+cat > export_options.plist << 'EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>development</string>
+    <key>teamID</key>
+    <string>536UU66TYG</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>com.aifun.dateideas.planadate</key>
+        <string>SoulPlan AI Fun Date Ideas last minute date idea ios_app_development 1732825290</string>
+    </dict>
+</dict>
+</plist>
+EOF
